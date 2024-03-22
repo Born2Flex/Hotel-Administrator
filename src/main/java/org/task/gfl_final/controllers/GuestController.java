@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.task.gfl_final.dto.GuestDTO;
 import org.task.gfl_final.dto.GuestRegistrationDTO;
 import org.task.gfl_final.services.GuestService;
 
@@ -13,8 +14,8 @@ import org.task.gfl_final.services.GuestService;
 @AllArgsConstructor
 public class GuestController {
     private GuestService guestService;
-    @PostMapping
-    public void registerGuest(@Valid @RequestBody GuestRegistrationDTO dto) {
-        guestService.registerGuest(dto);
+    @PostMapping()
+    public GuestDTO registerGuest(@Valid @RequestBody GuestRegistrationDTO dto) {
+        return guestService.registerGuest(dto);
     }
 }

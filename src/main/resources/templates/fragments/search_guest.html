@@ -1,0 +1,28 @@
+<header th:fragment="header">
+<div id="searchGuestComponent">
+    <div class="mb-3">
+        <label for="searchCriteria">Search by:</label>
+        <select class="custom-select" id="searchCriteria">
+            <option value="name">Name</option>
+            <option value="passport">Passport Number</option>
+            <option value="phone">Phone Number</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="searchValue">Enter search value:</label>
+        <input type="text" class="form-control" id="searchValue">
+    </div>
+    <button class="btn btn-primary" onclick="searchGuest()">Search</button>
+</div>
+
+<script>
+    function searchGuest() {
+        const searchCriteria = document.getElementById('searchCriteria').value;
+        const searchValue = document.getElementById('searchValue').value;
+
+        // Perform search based on the selected criteria
+        // Replace this with your actual search logic
+        console.log(`Searching for guests by ${searchCriteria} with value ${searchValue}`);
+    }
+</script>
+</header>

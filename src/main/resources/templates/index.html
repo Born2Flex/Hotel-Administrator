@@ -4,12 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel management</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+    <link th:hre="~{fragments/bootstrap :: bootstrap}"/>
 </head>
 <body>
-    <a href="/hotels" class="btn btn-info">Hotels</a>
-    <a href="/rooms" class="btn btn-info">Rooms</a>
-    <a href="/reservations">Reservations</a>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="container mt-4" style="max-width: 850px">
+    <div class="jumbotron">
+        <h1>Welcome, Administrator!</h1>
+        <p>As an administrator, you have access to various functions to manage the hotel:</p>
+        <ul>
+            <li><strong>Rooms:</strong> View and manage the list of rooms, including their class and capacity.</li>
+            <li><strong>Guests:</strong> View and manage guest information, including passport data and check-in/check-out dates.</li>
+            <li><strong>Check-In:</strong> Check-in guests, assign rooms, and issue receipts.</li>
+            <li><strong>Check-Out:</strong> Check-out guests, free up rooms, and issue additional receipts if needed.</li>
+            <li><strong>Search:</strong> Search for guests using any criteria.</li>
+        </ul>
+        <p>Use the navigation links above to access these functions.</p>
+    </div>
+</div>
 </body>
 </html>

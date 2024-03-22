@@ -21,7 +21,7 @@ public class Rental {
     private LocalDate endDate;
     @OneToOne
     @JoinColumn(name = "guest_id", nullable = false)
-    private Guest guest;
+    private GuestEntity guest;
     @OneToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;

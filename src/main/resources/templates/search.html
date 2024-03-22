@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!--        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.css}">-->
+<!--        <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="order-md-1">
+                <h4 class="mb-3">Search guest</h4>
+                <!-- Include the search guest component -->
+                <div id="searchGuestComponent">
+                    <div class="mb-3">
+                        <label for="searchCriteria">Search by:</label>
+                        <select class="custom-select" id="searchCriteria" onchange="toggleNameFields()">
+                            <option value="name">Name</option>
+                            <option value="passport">Passport Number</option>
+                            <option value="phone">Phone Number</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="nameFields" style="display: none;">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" class="form-control" id="firstName">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName">
+                    </div>
+                    <div class="mb-3" id="otherField">
+                        <label for="searchValue">Enter search value:</label>
+                        <input type="text" class="form-control" id="searchValue">
+                    </div>
+                    <button class="btn btn-primary" onclick="searchGuest()">Search</button>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myconfirm">Open Modal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--    <div th:replace="~{fragments/popup-search :: search}"></div>-->
+    <div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticWarningLabel">Warning</h1>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete <span id="course-txt" class="span-txt">course</span>?<br/>
+                    If you click delete, this <i>cannot be undone</i>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger delete-button">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myConfirmDialog = document.getElementById('myconfirm')
+        myConfirmDialog.addEventListener('show.bs.modal', function (event){
+            let button = event.relatedTarget
+            let link = button.getAttribute('data-bs-link')
+            let cid = button.getAttribute('data-bs-id')
+            let text = button.getAttribute('data-bs-text')
+            let modalTitle = myConfirmDialog.querySelector('.modal-title')
+            modalTitle.textContent = 'Delete: ' + text + ' (' + cid + ')'
+            let deleteButton = myConfirmDialog.querySelector('.delete-button')
+            deleteButton.setAttribute('href', link)
+            let course = document.getElementById('course-txt')
+            course.textContent = text
+        })
+    </script>
+</div>
+
+<script>
+    function toggleNameFields() {
+        const searchCriteria = document.getElementById('searchCriteria').value;
+        if (searchCriteria === 'name') {
+            document.getElementById('nameFields').style.display = 'block';
+            document.getElementById('otherField').style.display = 'none';
+        } else {
+            document.getElementById('nameFields').style.display = 'none';
+            document.getElementById('otherField').style.display = 'block';
+        }
+    }
+
+    function searchGuest() {
+        const searchCriteria = document.getElementById('searchCriteria').value;
+        const searchValue = document.getElementById('searchValue').value;
+
+        // Perform search based on the selected criteria
+        // Replace this with your actual search logic
+        console.log(`Searching for guests by ${searchCriteria} with value ${searchValue}`);
+    }
+</script>
+
+</body>
+</html>
