@@ -12,15 +12,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GuestRegistrationDTO {
-    @NotBlank
+public class GuestRegistrationDto {
+    @NotBlank(message = "Guest first name couldn't be blank or empty")
     private String firstName;
-    @NotBlank
+    @NotBlank(message = "Guest last name couldn't be blank or empty")
     private String lastName;
     @Pattern(regexp="(^$|\\d{10})")
     private String phoneNumber;
-    @Email
+    @Email(message = "Email should be valid")
     private String email;
-    @NotBlank
+    @NotBlank(message = "Passport data couldn't be blank or empty")
     private String passport;
 }

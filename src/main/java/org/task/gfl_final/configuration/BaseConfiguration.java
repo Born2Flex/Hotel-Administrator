@@ -2,20 +2,14 @@ package org.task.gfl_final.configuration;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.task.gfl_final.guest.GuestEntity;
 import org.task.gfl_final.guest.GuestRepository;
 import org.task.gfl_final.rental.Rental;
 import org.task.gfl_final.rental.dto.RentalRegistrationDTO;
-import org.task.gfl_final.room.Room;
 import org.task.gfl_final.room.RoomRepository;
-
-import java.time.LocalDate;
 
 @Configuration
 public class BaseConfiguration {
@@ -44,6 +38,18 @@ public class BaseConfiguration {
                 return destination;
             }
         });
+//        modelMapper.addConverter(new Converter<GuestEntity, GuestShortDTO>() {
+//            @Override
+//            public GuestShortDTO convert(MappingContext<GuestEntity, GuestShortDTO> context) {
+//                GuestEntity source = context.getSource();
+//                GuestShortDTO destination = context.getDestination() != null ? context.getDestination() : new GuestShortDTO();
+//                destination.setId(source.getId());
+//                destination.setFirstName(source.getFirstName());
+//                destination.setLastName(source.getLastName());
+//                destination.setPassport(source.getPassport());
+//                return destination;
+//            }
+//        });
         return modelMapper;
     }
 }

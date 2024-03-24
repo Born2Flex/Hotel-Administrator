@@ -1,11 +1,17 @@
 package org.task.gfl_final.guest;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.task.gfl_final.guest.GuestEntity;
 
 import java.util.List;
 
-public interface GuestRepository extends JpaRepository<GuestEntity, Long> {
+public interface GuestRepository extends JpaRepository<Guest, Long> {
+    List<Guest> findByLastNameLikeIgnoreCase(String lastName);
 
-    List<GuestEntity> findByLastNameLikeIgnoreCase(String lastName);
+//    List<GuestEntity> findByFirstNameIgnoreCase(String firstName);
+//
+//    GuestEntity findByPhoneNumber(String phoneNumber);
+//
+//    GuestEntity findByEmail(String email);
+//
+//    GuestEntity findByPassport(String passport);
 }

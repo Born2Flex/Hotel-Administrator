@@ -1,13 +1,13 @@
 package org.task.gfl_final.guest.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class Long {
-    private java.lang.Long id;
+@NoArgsConstructor
+public class GuestShortDto {
+    private Long id;
     private String firstName;
     private String lastName;
-    private String phoneNumber;
-    private String email;
     private String passport;
 }

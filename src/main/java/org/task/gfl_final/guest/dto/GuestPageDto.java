@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GuestPageDTO {
+public class GuestPageDto {
     private long currPage;
     private long numOfPages;
-    private List<GuestShortDTO> orderList;
+    private List<GuestShortDto> orderList;
 }

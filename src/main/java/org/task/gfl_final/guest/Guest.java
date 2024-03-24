@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "guest")
-public class GuestEntity {
+public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -23,6 +23,6 @@ public class GuestEntity {
     private String phoneNumber;
     @Column(name = "email", length = 50)
     private String email;
-    @Column(name = "passport", nullable = false, length = 20)
+    @Column(name = "passport", nullable = false, length = 20, unique = true)
     private String passport;
 }

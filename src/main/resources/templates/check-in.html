@@ -65,7 +65,7 @@
             </div>
 
             <!-- Total Price -->
-            <p class="mb-3">Total Price: <span id="totalPrice"></span>$</p>
+            <p class="mb-3">Total Price: <span id="totalPrice">0</span>$</p>
 
             <div class="d-flex justify-content-center" style="margin-top: 40px">
                 <button type="button" class="btn btn-info btn-block" style="width: 200px" id="proceedButton">Proceed</button>
@@ -172,7 +172,7 @@
                 selectedGuest.textContent = `Guest: ${data.firstName} ${data.lastName}`;
                 console.log('Registration form submitted successfully');
                 clearError('guestError')
-                showSuccessMessage(`Guest with id = ${responseJson['id']} created successfully`);
+                showSuccessMessage(`New guest registered successfully`);
             }
         } catch (e) {
             console.error('Error submitting form:', e);
@@ -206,27 +206,54 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="searchSurname" placeholder="Enter Surname">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-info dropdown-toggle" id="dropdownMenuButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onclick="selectOption('FIRST_NAME', 'First name')">First name</a>
+                            <a class="dropdown-item" href="#" onclick="selectOption('LAST_NAME', 'Last name')">Last name</a>
+                            <a class="dropdown-item" href="#" onclick="selectOption('PASSPORT', 'Passport')">Passport</a>
+                            <a class="dropdown-item" href="#" onclick="selectOption('PHONE_NUM', 'Phone num')">Phone num</a>
+                            <a class="dropdown-item" href="#" onclick="selectOption('EMAIL', 'Email')">Email</a>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="searchInput" aria-label="Text input with dropdown button">
                     <div class="input-group-append">
-                        <button type="button" class="btn btn-primary" onclick="searchGuests()" style="width: 100px;">Search</button>
+                        <button class="btn btn-info" type="button" onclick="searchGuests()">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
                 </div>
-                <hr style="margin-bottom: 8px">
+                <hr class="my-2">
                 <div id="guestSearchResults">
                     <!-- Search results will be displayed here -->
                 </div>
+
+                <div id="searchError" style="color: red"></div>
             </div>
+
         </div>
     </div>
 </div>
 
 <!--Search script-->
 <script>
+    let searchCriteria = -1;
+    function selectOption(option, text) {
+        searchCriteria = option;
+        document.getElementById('dropdownMenuButton').innerText = text;
+    }
+
     async function searchGuests() {
-        const surname = document.getElementById('searchSurname').value;
-        console.log('Searching guests by surname:', surname);
-        const response = await fetch(`/api/guests?surname=${surname}`);
+        if (searchCriteria === -1) {
+            document.getElementById('searchError').textContent = 'Please select search criteria';
+            return;
+        }
+        document.getElementById('searchError').textContent = '';
+
+        const paramVal = document.getElementById('searchInput').value;
+        console.log(`Searching guests by ${document.getElementById('dropdownMenuButton').innerText}: `, paramVal);
+        const response = await fetch(`/api/guests?criteria=${searchCriteria}&value=${paramVal}`);
         const responseJson = await response.json();
         console.log('Search results:', responseJson);
         displayGuestSearchResults(responseJson);
@@ -252,6 +279,18 @@
         $('#searchGuestModal').modal('hide');
         clearError('guestError');
     }
+
+    $(document).ready(function() {
+        $('#searchGuestModal').on('hidden.bs.modal', function (e) {
+            $('#dropdownMenuButton').val('Options');
+            $('#searchInput').val('');
+            $('#guestSearchResults').empty();
+            document.getElementById('searchError').textContent = '';
+            document.getElementById('dropdownMenuButton').innerText = 'Options';
+            searchCriteria = -1;
+        });
+    });
+
 </script>
 
 <!--Room Type Selection -->
@@ -354,16 +393,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Add event listener to the endDate picker
-        document.getElementById('endDate').addEventListener('change', updateTotalPrice);
         // document.getElementById('startDate').addEventListener('change', updateTotalPrice);
-        // document.getElementById('roomTypeSelection').addEventListener('change', updateTotalPrice);
+        document.getElementById('endDate').addEventListener('change', updateTotalPrice);
     });
 
     function updateTotalPrice() {
         console.log('End date changed');
         if (!validateDates()) {
-            document.getElementById('totalPrice').textContent = '';
+            document.getElementById('totalPrice').textContent = '0';
             return;
         }
         let startDate = new Date(document.getElementById('startDate').value);
@@ -380,18 +417,11 @@
     }
 </script>
 
+<script th:src="@{scripts/errors.js}"></script>
 <!--Form submission-->
 <script>
 <!--    TODO EXTRACT-->
-    function showError(errorEl, message) {
-        let errorElement = document.getElementById(errorEl);
-        errorElement.textContent = message;
-    }
 
-    function clearError(errorEl) {
-        let errorElement = document.getElementById(errorEl);
-        errorElement.textContent = '';
-    }
     document.addEventListener('DOMContentLoaded', function() {
         async function handleSubmit() {
             const roomTypeSelect = document.getElementById('roomTypeSelection');
@@ -461,7 +491,7 @@
             document.getElementById('selectedGuest').textContent = '';
             document.getElementById('roomTypeSelection').value = '';
             document.getElementById('roomSelection').value = '';
-            document.getElementById('totalPrice').textContent = '';
+            document.getElementById('totalPrice').textContent = '0';
         }
 
         document.getElementById('proceedButton').addEventListener('click', handleSubmit);
