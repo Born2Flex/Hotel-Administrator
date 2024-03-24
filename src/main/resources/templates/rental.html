@@ -64,6 +64,9 @@
                 <span id="endDateError" class="text-danger"></span>
             </div>
 
+            <!-- Total Price -->
+            <p class="mb-3">Total Price: <span id="totalPrice"></span>$</p>
+
             <div class="d-flex justify-content-center" style="margin-top: 40px">
                 <button type="button" class="btn btn-info btn-block" style="width: 200px" id="proceedButton">Proceed</button>
             </div>
@@ -264,7 +267,7 @@
             rooms.forEach(room => {
                 const option = document.createElement('option');
                 option.value = room.id;
-                option.innerHTML = 'Room: ' + room.roomNumber + ', Description: ' + room.description;
+                option.innerHTML = 'Room: ' + room.roomNumber;
                 roomSelect.appendChild(option);
             });
         }
@@ -290,7 +293,8 @@
                 roomTypes.forEach(roomType => {
                     const option = document.createElement('option');
                     option.value = roomType.id; // Set the value to the ID of the room type
-                    option.innerHTML = roomType.type + ' , beds: ' + roomType.numOfBeds + ', price per day: ' + roomType.price + '$';
+                    option.innerHTML = 'Type: ' + roomType.type + ', beds: ' + roomType.numOfBeds + ', price per day: ' + roomType.price + '$';
+                    option.setAttribute('data-price', roomType.price);
                     roomTypeSelect.appendChild(option);
                 });
             } catch (error) {
@@ -348,6 +352,32 @@
 
         return year1 === year2 && month1 === month2 && day1 === day2;
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listener to the endDate picker
+        document.getElementById('endDate').addEventListener('change', updateTotalPrice);
+        // document.getElementById('startDate').addEventListener('change', updateTotalPrice);
+        // document.getElementById('roomTypeSelection').addEventListener('change', updateTotalPrice);
+    });
+
+    function updateTotalPrice() {
+        console.log('End date changed');
+        if (!validateDates()) {
+            document.getElementById('totalPrice').textContent = '';
+            return;
+        }
+        let startDate = new Date(document.getElementById('startDate').value);
+        let endDate = new Date(this.value);
+        let differenceInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+        const roomTypeSelect = document.getElementById('roomTypeSelection');
+        const selectedOption = roomTypeSelect.options[roomTypeSelect.selectedIndex];
+        const price = selectedOption.getAttribute('data-price');
+        console.log(price)
+        let totalPrice = differenceInDays * price;
+        console.log('Total price:', totalPrice);
+        document.getElementById('totalPrice').textContent = totalPrice;
+    }
 </script>
 
 <!--Form submission-->
@@ -400,7 +430,8 @@
                 guestId: currentGuestId,
                 roomId: roomSelect.value,
                 startDate: document.getElementById('startDate').value,
-                endDate: document.getElementById('endDate').value
+                endDate: document.getElementById('endDate').value,
+                totalPrice: document.getElementById('totalPrice').textContent
             };
 
             const response = await fetch('/api/rentals', {
@@ -411,6 +442,7 @@
                 body: JSON.stringify(body)
             });
 
+            console.log(JSON.stringify(body));
             const responseJson = await response.json();
 
             if (responseJson['errors']) {
@@ -429,13 +461,12 @@
             document.getElementById('selectedGuest').textContent = '';
             document.getElementById('roomTypeSelection').value = '';
             document.getElementById('roomSelection').value = '';
+            document.getElementById('totalPrice').textContent = '';
         }
 
         document.getElementById('proceedButton').addEventListener('click', handleSubmit);
     });
 </script>
-
-
 
 </body>
 </html>

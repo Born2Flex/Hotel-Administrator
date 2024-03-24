@@ -21,10 +21,10 @@ public class Rental {
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "guest_id", nullable = false)
     private GuestEntity guest;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
     @Column(name = "total_price", nullable = false)

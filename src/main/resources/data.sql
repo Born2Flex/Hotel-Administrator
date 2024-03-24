@@ -20,7 +20,7 @@ INSERT INTO room_type (type, description, price, num_of_beds)VALUES
 ('Penthouse', 'Penthouse room', 400, 5);
 
 -- Rooms
-INSERT INTO room (room_number, room_type_id, is_available, description) VALUES
+INSERT INTO room (room_number, room_type_id, is_available) VALUES
 ('101', 1, true),
 ('102', 1, true),
 ('201', 2, true),
