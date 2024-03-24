@@ -1,0 +1,18 @@
+<header th:fragment="success-toaster">
+    <div class="alert alert-success fixed-size-alert" role="alert" id="successMessage" style="display: none; position: fixed;
+        top: 200px; height: 80px; left: 50%; transform: translateX(-50%);  z-index: 100; align-content: center">
+        <span id="guestIdPlaceholder"></span>
+    </div>
+
+    <script>
+        function showSuccessMessage(message) {
+            const successMessage = document.getElementById('successMessage');
+            const guestIdPlaceholder = document.getElementById('guestIdPlaceholder');
+            guestIdPlaceholder.textContent = message;
+            successMessage.style.display = 'block';
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</header>

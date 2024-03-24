@@ -1,10 +1,10 @@
-package org.task.gfl_final.dto;
+package org.task.gfl_final.guest.dto;
 
 import lombok.Data;
 
 @Data
-public class GuestDTO {
-    private Long id;
+public class Long {
+    private java.lang.Long id;
     private String firstName;
     private String lastName;
     private String phoneNumber;

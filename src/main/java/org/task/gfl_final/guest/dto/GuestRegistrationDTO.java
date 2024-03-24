@@ -1,4 +1,4 @@
-package org.task.gfl_final.dto;
+package org.task.gfl_final.guest.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

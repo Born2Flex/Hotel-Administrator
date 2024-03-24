@@ -1,4 +1,4 @@
-package org.task.gfl_final.entities;
+package org.task.gfl_final.guest;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class GuestEntity {
     private String lastName;
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email", length = 50)
     private String email;
     @Column(name = "passport", nullable = false, length = 20)
     private String passport;

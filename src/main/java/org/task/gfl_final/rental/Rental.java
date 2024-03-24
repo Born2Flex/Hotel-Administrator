@@ -1,8 +1,10 @@
-package org.task.gfl_final.entities;
+package org.task.gfl_final.rental;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.task.gfl_final.guest.GuestEntity;
+import org.task.gfl_final.room.Room;
 
 import java.time.LocalDate;
 

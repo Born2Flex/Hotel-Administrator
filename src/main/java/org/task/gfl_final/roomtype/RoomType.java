@@ -1,4 +1,4 @@
-package org.task.gfl_final.entities;
+package org.task.gfl_final.roomtype;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,4 +19,6 @@ public class RoomType {
     private String description;
     @Column(name = "price", nullable = false)
     private Double price;
+    @Column(name = "num_of_beds", nullable = false)
+    private Integer numOfBeds;
 }
