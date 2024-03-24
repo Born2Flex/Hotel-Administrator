@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.task.gfl_final.guest.GuestRepository;
 import org.task.gfl_final.rental.Rental;
-import org.task.gfl_final.rental.dto.RentalRegistrationDTO;
+import org.task.gfl_final.rental.dto.RentalRegistrationDto;
 import org.task.gfl_final.room.RoomRepository;
 
 @Configuration
@@ -16,10 +16,10 @@ public class BaseConfiguration {
     @Bean
     public ModelMapper modelMapper(@Autowired GuestRepository guestRepository, @Autowired RoomRepository roomRepository) {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addConverter(new Converter<RentalRegistrationDTO, Rental>() {
+        modelMapper.addConverter(new Converter<RentalRegistrationDto, Rental>() {
             @Override
-            public Rental convert(MappingContext<RentalRegistrationDTO, Rental> context) {
-                RentalRegistrationDTO source = context.getSource();
+            public Rental convert(MappingContext<RentalRegistrationDto, Rental> context) {
+                RentalRegistrationDto source = context.getSource();
                 Rental destination = context.getDestination() != null ? context.getDestination() : new Rental();
                 if (source.getGuestId() != null) {
 //                    GuestEntity guest = new GuestEntity();

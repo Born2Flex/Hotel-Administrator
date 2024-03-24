@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-@RequestMapping("/rental")
+@RequestMapping("/check-in")
 public class RentalViewController {
 
     @GetMapping()
     public String checkIn() {
-        return "rental";
+        return "check-in";
 //        return "register_new";
 //        return "guests";
     }

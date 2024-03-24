@@ -3,8 +3,8 @@ package org.task.gfl_final.guest;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.task.gfl_final.guest.dto.GuestShortDTO;
-import org.task.gfl_final.guest.dto.GuestRegistrationDTO;
+import org.task.gfl_final.guest.dto.GuestDto;
+import org.task.gfl_final.guest.dto.GuestRegistrationDto;
 
 import java.util.List;
 
@@ -14,14 +14,28 @@ public class GuestService {
     private GuestRepository guestRepository;
     private ModelMapper mapper;
 
-    public GuestShortDTO registerGuest(GuestRegistrationDTO dto) {
+    public GuestDto registerGuest(GuestRegistrationDto dto) {
         Guest entity = guestRepository.save(mapper.map(dto, Guest.class));
-        return mapper.map(entity, GuestShortDTO.class);
+        return mapper.map(entity, GuestDto.class);
     }
 
-    public List<GuestShortDTO> getGuestsByLastName(String lastName) {
+    public GuestDto updateGuest(Long id, GuestDto dto) {
+        Guest entity = guestRepository.findById(id).orElseThrow();
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setPhoneNumber(dto.getPhoneNumber());
+        entity.setEmail(dto.getEmail());
+        entity.setPassport(dto.getPassport());
+        return mapper.map(guestRepository.save(entity), GuestDto.class);
+    }
+
+    public void deleteGuest(Long id) {
+        guestRepository.deleteById(id);
+    }
+
+    public List<GuestDto> getGuestsByLastName(String lastName) {
         return guestRepository.findByLastNameLikeIgnoreCase(lastName).stream()
-                .map(guest -> mapper.map(guest, GuestShortDTO.class)).toList();
+                .map(guest -> mapper.map(guest, GuestDto.class)).toList();
     }
 //
 //    public List<GuestShortDTO> getGuestsByFirstName(String firstName) {
@@ -40,4 +54,15 @@ public class GuestService {
 //    public GuestShortDTO getGuestsByPassport(String passport) {
 //        return mapper.map(guestRepository.findByPassport(passport), GuestShortDTO.class);
 //    }
+
+    public List<GuestDto> getAllGuests() {
+        return guestRepository.findAll().stream()
+                .map(guest -> mapper.map(guest, GuestDto.class)).toList();
+    }
+
+    public List<GuestDto> getCurrentGuests() {
+        return guestRepository.findCurrentGuests().stream()
+                .map(guest -> mapper.map(guest, GuestDto.class)).toList();
+    }
+
 }

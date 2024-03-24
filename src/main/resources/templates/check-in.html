@@ -253,7 +253,7 @@
 
         const paramVal = document.getElementById('searchInput').value;
         console.log(`Searching guests by ${document.getElementById('dropdownMenuButton').innerText}: `, paramVal);
-        const response = await fetch(`/api/guests?criteria=${searchCriteria}&value=${paramVal}`);
+        const response = await fetch(`/api/guests/search?criteria=${searchCriteria}&value=${paramVal}`);
         const responseJson = await response.json();
         console.log('Search results:', responseJson);
         displayGuestSearchResults(responseJson);

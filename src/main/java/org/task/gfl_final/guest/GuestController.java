@@ -3,8 +3,8 @@ package org.task.gfl_final.guest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.task.gfl_final.guest.dto.GuestShortDTO;
-import org.task.gfl_final.guest.dto.GuestRegistrationDTO;
+import org.task.gfl_final.guest.dto.GuestDto;
+import org.task.gfl_final.guest.dto.GuestRegistrationDto;
 
 import java.util.List;
 
@@ -16,13 +16,33 @@ public class GuestController {
     private GuestService guestService;
 
     @PostMapping
-    public GuestShortDTO registerGuest(@Valid @RequestBody GuestRegistrationDTO dto) {
+    public GuestDto registerGuest(@Valid @RequestBody GuestRegistrationDto dto) {
         return guestService.registerGuest(dto);
     }
 
-    //TODO implement different criteria for search
+    @PutMapping("/{id}")
+    public GuestDto updateGuest(@PathVariable Long id, @Valid @RequestBody GuestDto dto) {
+        return guestService.updateGuest(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteGuest(@PathVariable Long id) {
+        guestService.deleteGuest(id);
+    }
+
     @GetMapping
-    public List<GuestShortDTO> getGuestsByCriteria(@RequestParam String criteria, @RequestParam String value) {
+    public List<GuestDto> getAllGuests() {
+        return guestService.getAllGuests();
+    }
+
+    @GetMapping("/current")
+    public List<GuestDto> getCurrentGuests() {
+        return guestService.getCurrentGuests();
+    }
+
+    //TODO implement different criteria for search
+    @GetMapping("/search")
+    public List<GuestDto> getGuestsByCriteria(@RequestParam String criteria, @RequestParam String value) {
 //        System.out.println("Last name = " + lastName);
 //        System.out.println(guestService.getGuestsByLastName(lastName));
 ////        return guestService.getGuestsBySurname(surname);

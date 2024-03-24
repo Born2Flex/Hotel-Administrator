@@ -4,7 +4,7 @@ import lombok.Data;
 import org.task.gfl_final.roomtype.RoomType;
 
 @Data
-public class RoomShortDTO {
+public class RoomShortDto {
     private Long id;
     private Long roomNumber;
     private Integer numOfBeds;

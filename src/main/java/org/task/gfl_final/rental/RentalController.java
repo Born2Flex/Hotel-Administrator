@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.task.gfl_final.rental.dto.RentalDTO;
-import org.task.gfl_final.rental.dto.RentalRegistrationDTO;
+import org.task.gfl_final.rental.dto.RentalDto;
+import org.task.gfl_final.rental.dto.RentalRegistrationDto;
 
 @RestController
 @RequestMapping("/api/rentals")
@@ -15,7 +15,7 @@ import org.task.gfl_final.rental.dto.RentalRegistrationDTO;
 public class RentalController {
     private RentalService rentalService;
     @PostMapping
-    public RentalDTO registerRental(@RequestBody RentalRegistrationDTO rentalRegistrationDTO) {
+    public RentalDto registerRental(@RequestBody RentalRegistrationDto rentalRegistrationDTO) {
         return rentalService.registerRental(rentalRegistrationDTO);
     }
 }
