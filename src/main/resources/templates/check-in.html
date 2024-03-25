@@ -306,7 +306,8 @@
             rooms.forEach(room => {
                 const option = document.createElement('option');
                 option.value = room.id;
-                option.innerHTML = 'Room: ' + room.roomNumber;
+                option.innerHTML = 'Room: ' + room.roomNumber + ', beds: ' + room.numOfBeds + ', price per day: ' + room.price + '$';
+                option.setAttribute('data-price', room.price);
                 roomSelect.appendChild(option);
             });
         }
@@ -332,8 +333,8 @@
                 roomTypes.forEach(roomType => {
                     const option = document.createElement('option');
                     option.value = roomType.id; // Set the value to the ID of the room type
-                    option.innerHTML = 'Type: ' + roomType.type + ', beds: ' + roomType.numOfBeds + ', price per day: ' + roomType.price + '$';
-                    option.setAttribute('data-price', roomType.price);
+                    option.innerHTML = 'Type: ' + roomType.type;
+
                     roomTypeSelect.appendChild(option);
                 });
             } catch (error) {
@@ -407,8 +408,8 @@
         let endDate = new Date(this.value);
         let differenceInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
 
-        const roomTypeSelect = document.getElementById('roomTypeSelection');
-        const selectedOption = roomTypeSelect.options[roomTypeSelect.selectedIndex];
+        const roomSelect = document.getElementById('roomSelection');
+        const selectedOption = roomSelect.options[roomSelect.selectedIndex];
         const price = selectedOption.getAttribute('data-price');
         console.log(price)
         let totalPrice = differenceInDays * price;

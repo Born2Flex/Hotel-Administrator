@@ -2,6 +2,7 @@ package org.task.gfl_final.guest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 

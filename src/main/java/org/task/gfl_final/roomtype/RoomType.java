@@ -17,8 +17,4 @@ public class RoomType {
     private String type;
     @Column(name = "description", nullable = false, length = 100)
     private String description;
-    @Column(name = "price", nullable = false)
-    private Double price;
-    @Column(name = "num_of_beds", nullable = false)
-    private Integer numOfBeds;
 }

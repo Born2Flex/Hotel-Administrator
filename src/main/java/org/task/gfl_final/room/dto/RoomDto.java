@@ -1,19 +1,27 @@
-package org.task.gfl_final.rental.dto;
+package org.task.gfl_final.room.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class RoomDto {
     @NotNull
-    Long id;
+    private Long id;
     @NotNull
-    Integer roomNumber;
+    private Integer roomNumber;
     @NotNull
-    RoomDto roomType;
+    private RoomDto roomType;
     @NotNull
-    Boolean isAvailable;
+    private Boolean isAvailable;
+    @Positive
+    private BigDecimal price;
+    @Positive
+    private Integer numOfBeds;
 }

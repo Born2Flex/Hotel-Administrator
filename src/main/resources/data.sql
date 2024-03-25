@@ -12,25 +12,25 @@ INSERT INTO guest (first_name, last_name, email, phone_number, passport) VALUES
 ('Matthew', 'Hernandez', 'matthew.hernandez@example.com', '555-654-3210', 'ST6543210');
 
 -- Room types
-INSERT INTO room_type (type, description, price, num_of_beds)VALUES
-('Single', 'Single room', 30, 1),
-('Double', 'Double room', 80, 2),
-('Deluxe', 'Deluxe room', 200, 3),
-('Suite', 'Suite room', 300, 4),
-('Penthouse', 'Penthouse room', 400, 5);
+INSERT INTO room_type (type, description)VALUES
+('Single', 'Single room'),
+('Double', 'Double room'),
+('Deluxe', 'Deluxe room'),
+('Suite', 'Suite room'),
+('Penthouse', 'Penthouse room');
 
 -- Rooms
-INSERT INTO room (room_number, room_type_id, is_available) VALUES
-('101', 1, true),
-('102', 1, true),
-('201', 2, true),
-('202', 2, true),
-('203', 2, true),
-('301', 3, true),
-('302', 3, true),
-('303', 3, true),
-('401', 4, true),
-('402', 4, true),
-('403', 4, true),
-('501', 5, true),
-('502', 5, true);
+INSERT INTO room (room_number, room_type_id, is_available, num_of_beds, price) VALUES
+('101', 1, true, 1, 40),
+('102', 1, true, 1, 50),
+('201', 2, true, 2, 80),
+('202', 2, true, 2, 90),
+('203', 2, true, 2, 100),
+('301', 3, true, 3, 200),
+('302', 3, true, 2, 210),
+('303', 3, true, 3, 220),
+('401', 4, true, 4, 300),
+('402', 4, true, 4, 310),
+('403', 4, true, 5, 320),
+('501', 5, true, 5, 400),
+('502', 5, true, 6, 410);
