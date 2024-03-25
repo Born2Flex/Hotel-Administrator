@@ -78,4 +78,7 @@ public class GuestService {
         return new GuestPageDto(pageable.getPageNumber(), page.getTotalPages(), guests);
     }
 
+    public List<GuestDto> find(String text) {
+        return null;
+    }
 }

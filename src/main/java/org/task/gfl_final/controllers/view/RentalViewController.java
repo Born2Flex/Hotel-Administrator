@@ -12,7 +12,5 @@ public class RentalViewController {
     @GetMapping()
     public String checkIn() {
         return "check-in";
-//        return "register_new";
-//        return "guests";
     }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GuestController {
     private GuestService guestService;
+    private GuestSearchService searchService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,14 +44,9 @@ public class GuestController {
 //        return guestService.getCurrentGuests();
 //    }
 
-    //TODO implement different criteria for search
     @GetMapping("/search")
     public List<GuestDto> getGuestsByCriteria(@RequestParam String criteria, @RequestParam String value) {
-//        System.out.println("Last name = " + lastName);
-//        System.out.println(guestService.getGuestsByLastName(lastName));
-////        return guestService.getGuestsBySurname(surname);
-//        return List.of(new GuestShortDTO(1L, "John", "Doe", "1234567890"),
-//                new GuestShortDTO(2L, "Jane", "Doe", "0987654321"));
-        return guestService.getGuestsByLastName(value);
+//        return guestService.getGuestsByLastName(value);
+        return searchService.search(criteria, value);
     }
 }

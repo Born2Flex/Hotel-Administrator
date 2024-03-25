@@ -8,17 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface GuestRepository extends JpaRepository<Guest, Long> {
-    List<Guest> findByLastNameLikeIgnoreCase(String lastName);
-
     @Query("SELECT g FROM Guest g WHERE EXISTS " +
             "(SELECT r FROM Rental r WHERE r.guest.id = g.id AND r.endDate >= CURRENT_DATE)")
     Page<Guest> findCurrentGuests(Pageable pageable);
 
+    List<Guest> findByLastNameLikeIgnoreCase(String lastName);
     List<Guest> findByFirstNameIgnoreCase(String firstName);
-
-    Guest findByPhoneNumber(String phoneNumber);
-
-    Guest findByEmail(String email);
-
-    Guest findByPassport(String passport);
+    List<Guest> findByEmailIgnoreCase(String email);
+    List<Guest> findByPhoneNumber(String phoneNumber);
+    List<Guest> findByPassport(String passport);
 }
