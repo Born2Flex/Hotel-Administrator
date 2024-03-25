@@ -77,8 +77,4 @@ public class GuestService {
                 .map(guest -> mapper.map(guest, GuestDto.class)).toList();
         return new GuestPageDto(pageable.getPageNumber(), page.getTotalPages(), guests);
     }
-
-    public List<GuestDto> find(String text) {
-        return null;
-    }
 }

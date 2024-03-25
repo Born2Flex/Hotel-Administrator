@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface GuestRepository extends JpaRepository<Guest, Long> {
     @Query("SELECT g FROM Guest g WHERE EXISTS " +
-            "(SELECT r FROM Rental r WHERE r.guest.id = g.id AND r.endDate >= CURRENT_DATE)")
+            "(SELECT r FROM Rental r WHERE r.guest.id = g.id AND r.checkOutDate >= CURRENT_DATE)")
     Page<Guest> findCurrentGuests(Pageable pageable);
 
     List<Guest> findByLastNameLikeIgnoreCase(String lastName);

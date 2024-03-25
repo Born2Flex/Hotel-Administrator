@@ -31,8 +31,8 @@ public class BaseConfiguration {
 //                    room.setId(source.getRoomId());
                     destination.setRoom(roomRepository.findById(source.getRoomId()).orElse(null));
                 }
-                destination.setStartDate(source.getStartDate());
-                destination.setEndDate(source.getEndDate());
+                destination.setCheckInDate(source.getCheckInDate());
+                destination.setCheckOutDate(source.getCheckOutDate());
                 destination.setTotalPrice(source.getTotalPrice());
 
                 return destination;

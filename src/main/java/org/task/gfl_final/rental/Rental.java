@@ -18,10 +18,10 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    @Column(name = "check_in_date", nullable = false)
+    private LocalDate checkInDate;
+    @Column(name = "check_out_date", nullable = false)
+    private LocalDate checkOutDate;
     @ManyToOne
     @JoinColumn(name = "guest_id", nullable = false)
     private Guest guest;

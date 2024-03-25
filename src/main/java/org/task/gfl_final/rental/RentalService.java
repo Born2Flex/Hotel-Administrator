@@ -20,4 +20,10 @@ public class RentalService {
         roomRepository.save(rental.getRoom());
         return modelMapper.map(rental, RentalDto.class);
     }
+
+    //TODO Custom exception
+    public RentalDto getRentalById(Long id) {
+        Rental rental = rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
+        return modelMapper.map(rental, RentalDto.class);
+    }
 }

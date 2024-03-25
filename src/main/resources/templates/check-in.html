@@ -52,16 +52,16 @@
             </div>
             <!-- Start Date -->
             <div class="mb-3">
-                <label for="startDate">Start Date</label>
-                <input type="date" class="form-control" id="startDate" required>
-                <span id="startDateError" class="text-danger"></span>
+                <label for="checkInDate">Start Date</label>
+                <input type="date" class="form-control" id="checkInDate" required>
+                <span id="checkInDateError" class="text-danger"></span>
             </div>
 
             <!-- End Date -->
             <div class="mb-3">
-                <label for="endDate">End Date</label>
-                <input type="date" class="form-control" id="endDate" required>
-                <span id="endDateError" class="text-danger"></span>
+                <label for="checkOutDate">End Date</label>
+                <input type="date" class="form-control" id="checkOutDate" required>
+                <span id="checkOutDateError" class="text-danger"></span>
             </div>
 
             <!-- Total Price -->
@@ -359,24 +359,24 @@
     }
     function validateDates() {
         let isValid = true;
-        let startDate = new Date(document.getElementById('startDate').value);
-        let endDate = new Date(document.getElementById('endDate').value);
+        let checkInDate = new Date(document.getElementById('checkInDate').value);
+        let checkOutDate = new Date(document.getElementById('checkOutDate').value);
         let today = new Date();
-        clearError('startDateError');
-        clearError('endDateError');
+        clearError('checkInDateError');
+        clearError('checkOutDateError');
 
-        if (!isSameDay(startDate, today) && startDate < today) {
-            showError('startDateError', 'Start date must be greater than or equal to today');
+        if (!isSameDay(checkInDate, today) && checkInDate < today) {
+            showError('checkInDateError', 'Start date must be greater than or equal to today');
             isValid = false;
-        } else if (!document.getElementById('startDate').value) {
-            showError('startDateError', 'Please select start date');
+        } else if (!document.getElementById('checkInDate').value) {
+            showError('checkInDateError', 'Please select start date');
             isValid = false;
         }
-        if (endDate <= startDate) {
-            showError('endDateError', 'End date must be greater than start date');
+        if (checkOutDate <= checkInDate) {
+            showError('checkOutDateError', 'End date must be greater than start date');
             isValid = false;
-        } else if (!document.getElementById('endDate').value) {
-            showError('endDateError', 'Please select end date');
+        } else if (!document.getElementById('checkOutDate').value) {
+            showError('checkOutDateError', 'Please select end date');
             isValid = false;
         }
         return isValid;
@@ -394,8 +394,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        // document.getElementById('startDate').addEventListener('change', updateTotalPrice);
-        document.getElementById('endDate').addEventListener('change', updateTotalPrice);
+        document.getElementById('checkOutDate').addEventListener('change', updateTotalPrice);
     });
 
     function updateTotalPrice() {
@@ -404,9 +403,9 @@
             document.getElementById('totalPrice').textContent = '0';
             return;
         }
-        let startDate = new Date(document.getElementById('startDate').value);
-        let endDate = new Date(this.value);
-        let differenceInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        let checkInDate = new Date(document.getElementById('checkInDate').value);
+        let checkOutDate = new Date(this.value);
+        let differenceInDays = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
 
         const roomSelect = document.getElementById('roomSelection');
         const selectedOption = roomSelect.options[roomSelect.selectedIndex];
@@ -418,7 +417,7 @@
     }
 </script>
 
-<script th:src="@{scripts/errors.js}"></script>
+<script th:src="@{/scripts/errors.js}"></script>
 <!--Form submission-->
 <script>
 <!--    TODO EXTRACT-->
@@ -460,8 +459,8 @@
             let body = {
                 guestId: currentGuestId,
                 roomId: roomSelect.value,
-                startDate: document.getElementById('startDate').value,
-                endDate: document.getElementById('endDate').value,
+                checkInDate: document.getElementById('checkInDate').value,
+                checkOutDate: document.getElementById('checkOutDate').value,
                 totalPrice: document.getElementById('totalPrice').textContent
             };
 
@@ -482,12 +481,13 @@
             } else {
                 console.log('Rental registration successful');
                 clearForm();
-                showSuccessMessage(`Rental created successfully`)
+                // showSuccessMessage(`Rental created successfully`)
+                window.location.href = '/rental/check/' + responseJson['id'];
             }
         }
         function clearForm() {
-            document.getElementById('startDate').value = '';
-            document.getElementById('endDate').value = '';
+            document.getElementById('checkInDate').value = '';
+            document.getElementById('checkOutDate').value = '';
             currentGuestId = null;
             document.getElementById('selectedGuest').textContent = '';
             document.getElementById('roomTypeSelection').value = '';

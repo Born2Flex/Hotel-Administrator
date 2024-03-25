@@ -22,6 +22,7 @@ public class GuestsViewController {
         model.addAttribute("currentPage", page.getCurrentPage());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("table_caption", "All guests");
+        model.addAttribute("url", "/hotel-guests");
         return "hotel-guests";
     }
 
@@ -32,6 +33,7 @@ public class GuestsViewController {
         model.addAttribute("currentPage", page.getCurrentPage());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("table_caption", "Current guests");
-        return "current-hotel-guests";
+        model.addAttribute("url", "/hotel-guests/current");
+        return "hotel-guests";
     }
 }

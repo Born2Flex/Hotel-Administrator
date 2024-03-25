@@ -11,7 +11,7 @@ public class RentalRegistrationDto {
     private Long guestId;
 //    private Room room;
 //    private GuestEntity guest;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
     private BigDecimal totalPrice;
 }

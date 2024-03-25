@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import org.task.gfl_final.roomtype.dto.RoomTypeDto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class RoomDto {
     @NotNull
     private Integer roomNumber;
     @NotNull
-    private RoomDto roomType;
+    private RoomTypeDto roomType;
     @NotNull
     private Boolean isAvailable;
     @Positive
