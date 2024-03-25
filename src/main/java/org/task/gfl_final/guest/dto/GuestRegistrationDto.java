@@ -12,7 +12,7 @@ public class GuestRegistrationDto {
     private String firstName;
     @NotBlank(message = "Guest last name couldn't be blank or empty")
     private String lastName;
-    @Pattern(regexp="(^$|\\d{10})", message = "Phone number should be 10 digits")
+    @Pattern(regexp="^[+]?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4,6}$", message = "Phone number should be valid")
     private String phoneNumber;
     @Email(message = "Email should be valid")
     private String email;

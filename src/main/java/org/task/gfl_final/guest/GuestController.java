@@ -2,6 +2,7 @@ package org.task.gfl_final.guest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.task.gfl_final.guest.dto.GuestDto;
 import org.task.gfl_final.guest.dto.GuestRegistrationDto;
@@ -16,6 +17,7 @@ public class GuestController {
     private GuestService guestService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GuestDto registerGuest(@Valid @RequestBody GuestRegistrationDto dto) {
         return guestService.registerGuest(dto);
     }
@@ -26,6 +28,7 @@ public class GuestController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGuest(@PathVariable Long id) {
         guestService.deleteGuest(id);
     }
@@ -35,10 +38,10 @@ public class GuestController {
         return guestService.getAllGuests();
     }
 
-    @GetMapping("/current")
-    public List<GuestDto> getCurrentGuests() {
-        return guestService.getCurrentGuests();
-    }
+//    @GetMapping("/current")
+//    public List<GuestDto> getCurrentGuests() {
+//        return guestService.getCurrentGuests();
+//    }
 
     //TODO implement different criteria for search
     @GetMapping("/search")

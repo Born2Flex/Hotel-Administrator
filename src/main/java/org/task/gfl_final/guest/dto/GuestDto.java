@@ -19,7 +19,7 @@ public class GuestDto implements Serializable {
     String firstName;
     @NotBlank(message = "Guest last name couldn't be blank or empty")
     String lastName;
-    @Pattern(regexp="(^$|\\d{10})")
+    @Pattern(regexp="^[+]?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4,6}$", message = "Phone number should be valid")
     String phoneNumber;
     @Email(message = "Email should be valid")
     String email;
