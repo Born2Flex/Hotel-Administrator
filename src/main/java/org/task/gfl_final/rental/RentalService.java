@@ -2,10 +2,15 @@ package org.task.gfl_final.rental;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.task.gfl_final.rental.dto.RentalDto;
+import org.task.gfl_final.rental.dto.RentalPageDto;
 import org.task.gfl_final.rental.dto.RentalRegistrationDto;
 import org.task.gfl_final.room.RoomRepository;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -25,5 +30,13 @@ public class RentalService {
     public RentalDto getRentalById(Long id) {
         Rental rental = rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
         return modelMapper.map(rental, RentalDto.class);
+    }
+
+    public RentalPageDto getCurrentRentals(Pageable pageable) {
+        Page<Rental> page = rentalRepository.findCurrentRentals(pageable);
+        List<RentalDto> rentals = rentalRepository.findCurrentRentals(pageable).stream()
+                .map(rental -> modelMapper.map(rental, RentalDto.class))
+                .toList();
+        return new RentalPageDto(pageable.getPageNumber(), page.getTotalPages(), rentals);
     }
 }

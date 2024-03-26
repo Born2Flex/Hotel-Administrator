@@ -21,7 +21,7 @@ public class GuestsViewController {
         model.addAttribute("guests", page.getGuests());
         model.addAttribute("currentPage", page.getCurrentPage());
         model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("table_caption", "All guests");
+        model.addAttribute("table_caption", "All Registered Guests");
         model.addAttribute("url", "/hotel-guests");
         return "hotel-guests";
     }

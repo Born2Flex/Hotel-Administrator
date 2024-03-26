@@ -16,13 +16,13 @@
         <h1>
             <span th:text="${table_caption}" th:remove="tag">title</span>
         </h1>
-        <a th:href="@{/hotel-guests/current}" class="btn btn-info mb-3" onclick="showCurrentGuests()">Current Guests</a>
-        <a th:href="@{/hotel-guests}" class="btn btn-info mb-3" onclick="showAllGuests()">All Guests</a>
-        <a th:href="@{/guests/add}" class="btn btn-success mb-3">Add guest</a>
+<!--        <a th:href="@{/hotel-guests/current}" class="btn btn-info mb-3" onclick="showCurrentGuests()">Current Guests</a>-->
+<!--        <a th:href="@{/hotel-guests}" class="btn btn-info mb-3" onclick="showAllGuests()">All Guests</a>-->
+        <button class="btn btn-success mb-3" style="color: white" data-toggle="modal" data-target="#registerGuestModal">Add guest</button>
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col" style="text-align: center">ID</th>
                 <th scope="col">First name</th>
                 <th scope="col">Last name</th>
                 <th scope="col">Email</th>
@@ -32,7 +32,7 @@
             </thead>
             <tbody>
             <tr th:each="g : ${guests}">
-                <td th:text="${g.id}"></td>
+                <td th:text="${g.id}" style="text-align: center"></td>
                 <td th:text="${g.firstName}"></td>
                 <td th:text="${g.lastName}"></td>
                 <td th:text="${g.email}"></td>
@@ -283,5 +283,122 @@
 
 </script>
 
+<!--Registration popup-->
+<div class="modal fade" id="registerGuestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Register new guest</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="checkInForm" method="post" action="guest/register">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstNameReg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastNameReg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passport">Passport</label>
+                        <input type="text" class="form-control" id="passportReg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="emailReg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone number</label>
+                        <input type="text" class="form-control" id="phoneNumberReg" required>
+                    </div>
+                    <div class="text-center"> <!-- Center align buttons -->
+                        <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal" id="closeBtnReg" style="width: 150px">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="saveGuestBtn" style="width: 150px">Register guest
+                        </button>
+                    </div>
+                </form>
+                <div id="errorContainerReg" style="display: none; padding-top: 10px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Script for guest registration-->
+<script>
+    const errorContainerReg = document.getElementById('errorContainerReg');
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('checkInForm');
+        const closeButton = document.getElementById('closeBtnReg');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = {
+                firstName: form.elements.firstNameReg.value,
+                lastName: form.elements.lastNameReg.value,
+                phoneNumber: form.elements.phoneNumberReg.value,
+                email: form.elements.emailReg.value,
+                passport: form.elements.passportReg.value
+            };
+
+            await processRequest('POST', '/api/guests', formData);
+        });
+
+        closeButton.addEventListener('click', function () {
+            errorContainerReg.style.display = 'none';
+            form.reset();
+        });
+    });
+
+    async function processRequest(method, url, data) {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        try {
+            const responseJson = await response.json();
+            if (responseJson['errors']) {
+                console.error('Error submitting form:', response);
+                displayErrorMessage(responseJson['errors']);
+            } else {
+                const form = document.getElementById('checkInForm');
+                const selectedGuest = document.getElementById('selectedGuest');
+                form.reset();
+                // showSuccess(`Guest with id ${responseJson['id']} created successfully`);
+                $('#registerGuestModal').modal('hide');
+                errorContainer.textContent = '';
+                console.log('Registration form submitted successfully');
+                showSuccessMessage(`New guest registered successfully`);
+                setTimeout(() => location.reload(), 3100);
+            }
+        } catch (e) {
+            console.error('Error submitting form:', e);
+            displayErrorMessage('Network Error');
+        }
+    }
+
+    function displayErrorMessage(message) {
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.textContent = message;
+        errorContainer.style.color = 'red';
+        errorContainer.style.display = 'block';
+    }
+
+    // function showSuccess(message) {
+    //     const errorContainer = document.getElementById('errorContainer');
+    //     errorContainer.textContent = message;
+    //     errorContainer.style.color = 'green';
+    //     errorContainer.style.display = 'block';
+    // }
+</script>
 </body>
 </html>
