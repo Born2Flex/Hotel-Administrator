@@ -15,10 +15,7 @@
         <h1>
             <span th:text="${table_caption}" th:remove="tag">title</span>
         </h1>
-<!--        <a th:href="@{/hotel-guests/current}" class="btn btn-info mb-3">Current Guests</a>-->
-        <a th:href="@{/check-in}" class="btn btn-success mb-3">Add rental</a>
-<!--        <a th:href="@{/hotel-guests}" class="btn btn-info mb-3" onclick="showAllGuests()">All Guests</a>-->
-<!--        <a th:href="@{/guests/add}" class="btn btn-success mb-3">Add guest</a>-->
+        <a th:href="@{/check-in}" class="btn btn-info mb-3">Add rental</a>
         <table class="table table-striped table-bordered">
             <thead>
             <tr >
@@ -30,7 +27,7 @@
                 <th scope="col">Check in</th>
                 <th scope="col">Check out</th>
                 <th scope="col">Price</th>
-                <th scope="col">Actions</th>
+                <th scope="col" style="text-align: center">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -40,17 +37,14 @@
                 <td th:text="${r.guest.lastName}"></td>
                 <td th:text="${r.guest.passport}"></td>
                 <td th:text="${r.room.roomNumber}" ></td>
-                <td th:text="${r.checkInDate}"></td>
-                <td th:text="${r.checkOutDate}"></td>
+                <td th:text="${#temporals.format(r.checkInDate, 'dd-MM-yyyy')}"></td>
+                <td th:text="${#temporals.format(r.checkOutDate, 'dd-MM-yyyy')}"></td>
                 <td th:text="${r.totalPrice}"></td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal"
-                            th:attr="data-id=${r.id}">
+                <td style="text-align: center">
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editRentalModal"
+                            th:attr="data-id=${r.id}, data-check-in-date=${r.checkInDate},
+                            data-check-out-date=${r.checkOutDate}">
                         Edit
-                    </button>
-                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myconfirm"
-                            th:attr="data-id=${r.id}">
-                        Delete
                     </button>
                 </td>
             </tr>
@@ -82,8 +76,133 @@
                 </li>
             </ul>
         </nav>
-
     </div>
 </div>
+<div class="modal fade" id="editRentalModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Rental</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="checkInDate">Check In Date</label>
+                        <input type="date" class="form-control" id="checkInDate" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkOutDate">Check Out Date</label>
+                        <input type="date" class="form-control" id="checkOutDate" required>
+                        <span id="checkOutDateError" class="text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal" id="closeBtnEdit"
+                                style="width: 150px">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary" id='editRental' style="width: 150px">Edit guest
+                        </button>
+                    </div>
+                    <span id="errorContainer" class="text-danger" style="padding-top: 10px"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let rentalId = null;
+    $(document).ready(function () {
+        $('#editRentalModal').on('show.bs.modal', function (event) {
+            console.log('Modal opened');
+            const button = $(event.relatedTarget);
+            rentalId = button.data('id');
+            let checkInDate = button.data('check-in-date');
+            let checkOutDate = button.data('check-out-date');
+
+            const modal = $(this);
+            const form = modal.find('form');
+            form.find('#checkInDate').val(checkInDate);
+            form.find('#checkOutDate').val(checkOutDate);
+        });
+    });
+
+    const errorContainer = document.getElementById('errorContainer');
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('editForm');
+        const closeButton = document.getElementById('closeBtnEdit');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = {
+                id: rentalId,
+                checkOutDate: form.elements.checkOutDate.value
+            };
+            if (validateDate()) {
+                clearError('checkOutDateError');
+                await processRequest('PUT', `/api/rentals/${rentalId}`, formData);
+            }
+        });
+
+        closeButton.addEventListener('click', function () {
+            errorContainer.style.display = 'none';
+            form.reset();
+        });
+    });
+
+    async function processRequest(method, url, data) {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        try {
+            const responseJson = await response.json();
+            if (responseJson['errors']) {
+                console.log('Error submitting form:', response);
+                displayErrorMessageEdit(responseJson['errors']);
+            } else {
+                const form = document.getElementById('editForm');
+                form.reset();
+                $('#editRentalModal').modal('hide');
+                errorContainer.textContent = '';
+                console.log('Edit form submitted successfully')
+                location.href = '/rental/check/' + responseJson['id'];
+            }
+        } catch (e) {
+            console.error('Error submitting form:', e);
+            displayErrorMessageEdit('Network Error');
+        }
+    }
+
+    function displayErrorMessageEdit(message) {
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.textContent = message;
+        errorContainer.style.color = 'red';
+        errorContainer.style.display = 'block';
+    }
+
+    function validateDate() {
+        let isValid = true;
+        let checkOutDate = new Date(document.getElementById('checkOutDate').value);
+        let today = new Date();
+
+        if (!document.getElementById('checkOutDate').value) {
+            showError('errorContainer', 'Please select end date');
+            isValid = false;
+        }
+        if (checkOutDate <= today) {
+            showError('errorContainer', 'End date must be greater than today');
+            isValid = false;
+        }
+        return isValid;
+    }
+</script>
+
+<script th:src="@{/scripts/errors.js}"></script>
 </body>
 </html>

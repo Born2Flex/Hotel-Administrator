@@ -22,6 +22,11 @@ public class RentalViewController {
         return "check-in";
     }
 
+    @GetMapping("/check-out")
+    public String checkOut() {
+        return "check-out";
+    }
+
     @GetMapping("/rental/check/{id}")
     public String showRentalCheck(@PathVariable Long id, Model model) {
         model.addAttribute("rental", rentalService.getRentalById(id));

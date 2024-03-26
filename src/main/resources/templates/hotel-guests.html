@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="col-auto">
-                <button class="btn btn-success mb-3" style="color: white" data-toggle="modal" data-target="#registerGuestModal">Add guest</button>
+                <button class="btn btn-info mb-3" style="color: white" data-toggle="modal" data-target="#registerGuestModal">Add guest</button>
             </div>
         </div>
         <div id="searchError" style="color: red"></div>
@@ -51,7 +51,7 @@
                 <th scope="col">Last name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone number</th>
-                <th scope="col">Actions</th>
+                <th scope="col" style="text-align: center">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@
                 <td th:text="${g.lastName}"></td>
                 <td th:text="${g.email}"></td>
                 <td th:text="${g.phoneNumber}"></td>
-                <td>
+                <td style="text-align: center">
                     <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal"
                             th:attr="data-id=${g.id}, data-firstName=${g.firstName}, data-lastName=${g.lastName},
                             data-email=${g.email}, data-phoneNumber=${g.phoneNumber}, data-passport=${g.passport}">
@@ -138,7 +138,7 @@
                         <input type="text" class="form-control" id="phoneNumber" required>
                     </div>
                     <div class="text-center">
-                        <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal" id="closeBtn"
+                        <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal" id="closeBtnEdit"
                                 style="width: 150px">Close
                         </button>
                         <button type="submit" class="btn btn-primary" id='editGuest' style="width: 150px">Edit guest
@@ -177,7 +177,7 @@
     const errorContainer = document.getElementById('errorContainer');
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('editForm');
-        const closeButton = document.getElementById('closeBtn');
+        const closeButton = document.getElementById('closeBtnEdit');
 
         form.addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -211,14 +211,13 @@
         try {
             const responseJson = await response.json();
             if (responseJson['errors']) {
-                console.error('Error submitting form:', response);
-                displayErrorMessage(responseJson['errors']);
+                console.log('Error submitting form:', response);
+                displayErrorMessageEdit(responseJson['errors']);
             } else {
                 const form = document.getElementById('editForm');
                 form.reset();
                 // showSuccess(`Guest with id ${responseJson['id']} edited successfully`);
                 $('#editModal').modal('hide');
-
                 errorContainer.textContent = '';
                 console.log('Edit form submitted successfully')
                 showSuccessMessage(`Guest edited successfully`)
@@ -226,11 +225,11 @@
             }
         } catch (e) {
             console.error('Error submitting form:', e);
-            displayErrorMessage('Network Error');
+            displayErrorMessageEdit('Network Error');
         }
     }
 
-    function displayErrorMessage(message) {
+    function displayErrorMessageEdit(message) {
         const errorContainer = document.getElementById('errorContainer');
         errorContainer.textContent = message;
         errorContainer.style.color = 'red';
@@ -292,7 +291,6 @@
         try {
             if (!response.ok) {
                 console.error('Error deleting guest:', response);
-                displayErrorMessage(responseJson['errors']);
             } else {
                 $('#myconfirm').modal('hide');
                 console.log('Guest deleted successfully');
@@ -371,7 +369,7 @@
                 passport: form.elements.passportReg.value
             };
 
-            await processRequest('POST', '/api/guests', formData);
+            await processRequestReg('POST', '/api/guests', formData);
         });
 
         closeButton.addEventListener('click', function () {
@@ -380,7 +378,7 @@
         });
     });
 
-    async function processRequest(method, url, data) {
+    async function processRequestReg(method, url, data) {
         const response = await fetch(url, {
             method: method,
             headers: {

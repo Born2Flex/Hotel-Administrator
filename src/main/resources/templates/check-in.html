@@ -421,8 +421,6 @@
 
 <!--Form submission-->
 <script>
-<!--    TODO EXTRACT-->
-
     document.addEventListener('DOMContentLoaded', function() {
         async function handleSubmit() {
             const roomTypeSelect = document.getElementById('roomTypeSelection');
@@ -462,7 +460,6 @@
                 roomId: roomSelect.value,
                 checkInDate: document.getElementById('checkInDate').value,
                 checkOutDate: document.getElementById('checkOutDate').value,
-                totalPrice: document.getElementById('totalPrice').textContent
             };
 
             const response = await fetch('/api/rentals', {

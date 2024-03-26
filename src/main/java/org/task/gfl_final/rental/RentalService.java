@@ -8,8 +8,13 @@ import org.springframework.stereotype.Service;
 import org.task.gfl_final.rental.dto.RentalDto;
 import org.task.gfl_final.rental.dto.RentalPageDto;
 import org.task.gfl_final.rental.dto.RentalRegistrationDto;
+import org.task.gfl_final.rental.dto.RentalUpdateDto;
+import org.task.gfl_final.room.Room;
 import org.task.gfl_final.room.RoomRepository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -20,10 +25,18 @@ public class RentalService {
     private ModelMapper modelMapper;
 
     public RentalDto registerRental(RentalRegistrationDto rentalRegistrationDTO) {
-        Rental rental = rentalRepository.save(modelMapper.map(rentalRegistrationDTO, Rental.class));
+        Rental rental = modelMapper.map(rentalRegistrationDTO, Rental.class);
+        rental.setTotalPrice(calculateTotalPrice(rental.getRoom(), rental.getCheckInDate(), rental.getCheckOutDate()));
         rental.getRoom().setIsAvailable(false);
         roomRepository.save(rental.getRoom());
-        return modelMapper.map(rental, RentalDto.class);
+        return modelMapper.map(rentalRepository.save(rental), RentalDto.class);
+    }
+
+    public RentalDto updateRental(Long id, RentalUpdateDto rentalDTO) {
+        Rental rental = rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
+        rental.setCheckOutDate(rentalDTO.getCheckOutDate());
+        rental.setTotalPrice(calculateTotalPrice(rental.getRoom(), rental.getCheckInDate(), rental.getCheckOutDate()));
+        return modelMapper.map(rentalRepository.save(rental), RentalDto.class);
     }
 
     //TODO Custom exception
@@ -38,5 +51,10 @@ public class RentalService {
                 .map(rental -> modelMapper.map(rental, RentalDto.class))
                 .toList();
         return new RentalPageDto(pageable.getPageNumber(), page.getTotalPages(), rentals);
+    }
+
+    private BigDecimal calculateTotalPrice(Room room, LocalDate checkInDate, LocalDate checkOutDate) {
+        long rentDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        return room.getPrice().multiply(BigDecimal.valueOf(rentDays));
     }
 }

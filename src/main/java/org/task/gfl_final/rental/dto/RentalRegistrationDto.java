@@ -9,9 +9,6 @@ import java.time.LocalDate;
 public class RentalRegistrationDto {
     private Long roomId;
     private Long guestId;
-//    private Room room;
-//    private GuestEntity guest;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private BigDecimal totalPrice;
 }
