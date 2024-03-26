@@ -12,9 +12,9 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
             "(SELECT r FROM Rental r WHERE r.guest.id = g.id AND r.checkInDate <= CURRENT_DATE AND r.checkOutDate >= CURRENT_DATE)")
     Page<Guest> findCurrentGuests(Pageable pageable);
 
-    List<Guest> findByLastNameLikeIgnoreCase(String lastName);
-    List<Guest> findByFirstNameIgnoreCase(String firstName);
-    List<Guest> findByEmailIgnoreCase(String email);
-    List<Guest> findByPhoneNumber(String phoneNumber);
-    List<Guest> findByPassport(String passport);
+    Page<Guest> findByLastNameLikeIgnoreCase(String lastName, Pageable pageable);
+    Page<Guest> findByFirstNameIgnoreCase(String firstName, Pageable pageable);
+    Page<Guest> findByEmailIgnoreCase(String email, Pageable pageable);
+    Page<Guest> findByPhoneNumber(String phoneNumber, Pageable pageable);
+    Page<Guest> findByPassport(String passport, Pageable pageable);
 }

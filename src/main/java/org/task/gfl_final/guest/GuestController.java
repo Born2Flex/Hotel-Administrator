@@ -2,6 +2,8 @@ package org.task.gfl_final.guest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.task.gfl_final.guest.dto.GuestDto;
@@ -45,8 +47,8 @@ public class GuestController {
 //    }
 
     @GetMapping("/search")
-    public List<GuestDto> getGuestsByCriteria(@RequestParam String criteria, @RequestParam String value) {
-//        return guestService.getGuestsByLastName(value);
-        return searchService.search(criteria, value);
+    public List<GuestDto> getGuestsByCriteria(@RequestParam String criteria, @RequestParam String value,
+                                              @PageableDefault(sort = "id", size = 20) Pageable pageable) {
+        return searchService.search(criteria, value, pageable).getGuests();
     }
 }

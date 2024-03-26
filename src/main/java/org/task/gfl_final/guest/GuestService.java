@@ -36,28 +36,6 @@ public class GuestService {
         guestRepository.deleteById(id);
     }
 
-    public List<GuestDto> getGuestsByLastName(String lastName) {
-        return guestRepository.findByLastNameLikeIgnoreCase(lastName).stream()
-                .map(guest -> mapper.map(guest, GuestDto.class)).toList();
-    }
-//
-//    public List<GuestShortDTO> getGuestsByFirstName(String firstName) {
-//        return guestRepository.findByFirstNameIgnoreCase(firstName).stream()
-//                .map(guest -> mapper.map(guest, GuestShortDTO.class)).toList();
-//    }
-//
-//    public GuestShortDTO getGuestsByPhoneNum(String phoneNum) {
-//        return mapper.map(guestRepository.findByPhoneNumber(phoneNum), GuestShortDTO.class);
-//    }
-//
-//    public GuestShortDTO getGuestsByEmail(String email) {
-//        return mapper.map(guestRepository.findByEmail(email), GuestShortDTO.class);
-//    }
-//
-//    public GuestShortDTO getGuestsByPassport(String passport) {
-//        return mapper.map(guestRepository.findByPassport(passport), GuestShortDTO.class);
-//    }
-
     public List<GuestDto> getAllGuests() {
         return guestRepository.findAll().stream()
                 .map(guest -> mapper.map(guest, GuestDto.class)).toList();
