@@ -33,5 +33,4 @@ public class RentalController {
     public RentalDto checkOutRental(@PathVariable Long id) {
         return rentalService.checkOutRental(id);
     }
-
 }

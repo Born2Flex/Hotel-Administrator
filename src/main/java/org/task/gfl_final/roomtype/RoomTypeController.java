@@ -15,9 +15,6 @@ public class RoomTypeController {
     private RoomTypeService roomTypeService;
     @GetMapping
     public List<RoomTypeDto> getRoomTypes() {
-        List<RoomTypeDto> roomTypes = roomTypeService.getRoomTypes();
-        System.out.println(roomTypes);
-        return roomTypes;
+        return roomTypeService.getRoomTypes();
     }
-
 }

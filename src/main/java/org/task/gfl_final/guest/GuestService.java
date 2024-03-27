@@ -48,11 +48,4 @@ public class GuestService {
 
         return new GuestPageDto(pageable.getPageNumber(), page.getTotalPages(), guests);
     }
-
-    public GuestPageDto getCurrentGuests(Pageable pageable) {
-        Page<Guest> page = guestRepository.findCurrentGuests(pageable);
-        List<GuestDto> guests = page.stream()
-                .map(guest -> mapper.map(guest, GuestDto.class)).toList();
-        return new GuestPageDto(pageable.getPageNumber(), page.getTotalPages(), guests);
-    }
 }

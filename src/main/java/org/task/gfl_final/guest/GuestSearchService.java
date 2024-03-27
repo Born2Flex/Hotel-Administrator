@@ -13,7 +13,6 @@ import org.task.gfl_final.guest.dto.GuestPageDto;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Service
 public class GuestSearchService {
@@ -31,7 +30,6 @@ public class GuestSearchService {
         );
     }
 
-    //TODO Add custom exception
     public GuestPageDto search(String criteria, String value, Pageable pageable) {
         if (!searchCriteria.containsKey(criteria)) {
             throw new IllegalArgumentException("Invalid search criteria");

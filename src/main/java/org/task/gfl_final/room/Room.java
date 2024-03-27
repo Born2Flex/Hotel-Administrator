@@ -28,6 +28,4 @@ public class Room {
     private Integer numOfBeds;
     @Column(name = "is_available", nullable = false)
     private Boolean isAvailable;
-//    @Column(name = "picture_path", nullable = false)
-//    private String picture;
 }

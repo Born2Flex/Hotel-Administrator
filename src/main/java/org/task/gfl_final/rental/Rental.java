@@ -22,10 +22,10 @@ public class Rental {
     private LocalDate checkInDate;
     @Column(name = "check_out_date", nullable = false)
     private LocalDate checkOutDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guest_id", nullable = false)
     private Guest guest;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
     @Column(name = "total_price", nullable = false)

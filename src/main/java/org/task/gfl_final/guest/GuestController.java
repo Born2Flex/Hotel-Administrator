@@ -41,11 +41,6 @@ public class GuestController {
         return guestService.getAllGuests();
     }
 
-//    @GetMapping("/current")
-//    public List<GuestDto> getCurrentGuests() {
-//        return guestService.getCurrentGuests();
-//    }
-
     @GetMapping("/search")
     public List<GuestDto> getGuestsByCriteria(@RequestParam String criteria, @RequestParam String value,
                                               @PageableDefault(sort = "id", size = 20) Pageable pageable) {

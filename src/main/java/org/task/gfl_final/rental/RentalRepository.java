@@ -11,16 +11,17 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
      * @param pageable Pageable object
      * @return Page of Rental objects
      */
-    @Query("SELECT r FROM Rental r WHERE r.checkOutDate >= CURRENT_DATE AND EXISTS " +
-            "(SELECT m FROM Room m WHERE m.id = r.room.id AND m.isAvailable = false)")
+    @Query("SELECT r FROM Rental r JOIN r.room m " +
+            "WHERE r.checkOutDate >= CURRENT_DATE AND m.isAvailable = false")
     Page<Rental> findCurrentRentals(Pageable pageable);
+
 
     /**
      * Query to find all rentals that are checking out today
      * @param pageable Pageable object
      * @return Page of Rental objects
      */
-    @Query("SELECT r FROM Rental r WHERE r.checkOutDate = CURRENT_DATE AND EXISTS " +
-            "(SELECT m FROM Room m WHERE m.id = r.room.id AND m.isAvailable = false)")
+    @Query("SELECT r FROM Rental r JOIN r.room m " +
+            "WHERE r.checkOutDate = CURRENT_DATE AND m.isAvailable = false")
     Page<Rental> findRentalsWhichCheckOutToday(Pageable pageable);
 }

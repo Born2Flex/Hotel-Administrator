@@ -27,15 +27,6 @@ public class GuestsViewController {
         return "hotel-guests";
     }
 
-    @GetMapping("/current")
-    public String showCurrentGuests(Model model, @PageableDefault(sort = "id", size = 5) Pageable pageable) {
-        GuestPageDto page = guestService.getCurrentGuests(pageable);
-        setModelAttributes(model, page);
-        model.addAttribute("table_caption", "Current guests");
-        model.addAttribute("url", "/hotel-guests/current");
-        return "hotel-guests";
-    }
-
     @GetMapping("/search")
     public String searchGuests(Model model, @RequestParam String criteria, @RequestParam String value,
                                @PageableDefault(sort = "id", size = 5) Pageable pageable) {

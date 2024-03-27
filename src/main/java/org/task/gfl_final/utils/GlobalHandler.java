@@ -24,16 +24,10 @@ public class GlobalHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(UserNotFoundException.class)
-//    public ResponseEntity<ApiError> handleNoSuchEntityException(UserNotFoundException e) {
-//        log.info("User not found: {}", e.getMessage());
-//        ApiError response = new ApiError(LocalDateTime.now(), HttpStatus.NOT_FOUND, e.getMessage(), 2, List.of(e.getMessage()));
-//        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-//    }
-//
-//    @ExceptionHandler({EmailDuplicateException.class, IpnDuplicateException.class})
-//    public ResponseEntity<ApiError> handleEmailDuplicateException(Exception e) {
-//        ApiError response = new ApiError(LocalDateTime.now(), HttpStatus.BAD_REQUEST, e.getMessage(), 3, List.of(e.getMessage()));
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(Error.class)
+    public ResponseEntity<ApiError> handleNoSuchEntityException(Error e) {
+        log.info("{}", e.getMessage(), e);
+        ApiError response = new ApiError(LocalDateTime.now(), HttpStatus.BAD_REQUEST, e.getMessage(), 5, List.of(e.getMessage()));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
