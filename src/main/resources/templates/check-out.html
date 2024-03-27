@@ -76,8 +76,8 @@
         checkboxes.forEach(function(checkbox) {
             rentalIds.push(checkbox.value);
         });
-        fetch('/api/rentals/checkout', {
-            method: 'POST',
+        fetch('/api/rentals/check-out', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },

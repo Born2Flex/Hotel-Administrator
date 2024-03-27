@@ -24,8 +24,14 @@ public class RentalController {
         return rentalService.updateRental(id, rentalDTO);
     }
 
-    @PostMapping("/checkout")
-    public List<RentalDto> checkoutRentals(@RequestBody List<Long> rentalIds) {
+    @PutMapping("/check-out")
+    public List<RentalDto> checkOutManyRentals(@RequestBody List<Long> rentalIds) {
         return rentalService.checkOutRentals(rentalIds);
     }
+
+    @PutMapping("/check-out/{id}")
+    public RentalDto checkOutRental(@PathVariable Long id) {
+        return rentalService.checkOutRental(id);
+    }
+
 }

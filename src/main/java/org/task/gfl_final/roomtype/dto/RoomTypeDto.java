@@ -10,7 +10,7 @@ public class RoomTypeDto {
     @NotNull
     private Long id;
     @NotBlank
-    private String type;
+    private String name;
     @NotBlank
     private String description;
 }

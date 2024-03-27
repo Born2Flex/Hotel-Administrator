@@ -47,7 +47,7 @@ public class RentalService {
 
     public RentalPageDto getCurrentRentals(Pageable pageable) {
         Page<Rental> page = rentalRepository.findCurrentRentals(pageable);
-        List<RentalDto> rentals = rentalRepository.findCurrentRentals(pageable).stream()
+        List<RentalDto> rentals = page.getContent().stream()
                 .map(rental -> modelMapper.map(rental, RentalDto.class))
                 .toList();
         return new RentalPageDto(pageable.getPageNumber(), page.getTotalPages(), rentals);
@@ -62,14 +62,16 @@ public class RentalService {
     }
 
     public List<RentalDto> checkOutRentals(List<Long> rentalIds) {
-        List<Rental> rentals = rentalRepository.findAllById(rentalIds);
-        rentals.forEach(rental -> {
-            rental.getRoom().setIsAvailable(true);
-            roomRepository.save(rental.getRoom());
-        });
-        return rentals.stream()
-                .map(rental -> modelMapper.map(rental, RentalDto.class))
+        return rentalIds.stream()
+                .map(this::checkOutRental)
                 .toList();
+    }
+
+    public RentalDto checkOutRental(Long id) {
+        Rental rental = rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
+        rental.getRoom().setIsAvailable(true);
+        roomRepository.save(rental.getRoom());
+        return modelMapper.map(rental, RentalDto.class);
     }
 
     private BigDecimal calculateTotalPrice(Room room, LocalDate checkInDate, LocalDate checkOutDate) {

@@ -46,6 +46,11 @@
                             data-check-out-date=${r.checkOutDate}, data-total-price=${r.totalPrice}">
                         Edit
                     </button>
+                    <button type="button" class="btn btn-sm" style="background-color: mediumseagreen; color: white" data-toggle="modal" data-target="#myconfirm"
+                            th:attr="data-id=${r.id}, data-check-in-date=${r.checkInDate},
+                            data-check-out-date=${r.checkOutDate}, data-total-price=${r.totalPrice}">
+                        Check out
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -206,6 +211,99 @@
         return isValid;
     }
 </script>
+
+
+<div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Check out</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    Are you sure want to check out <span id="course-txt" class="span-txt">guest</span>?<br/>
+                    If you click Ok, this <i>cannot be undone</i>.
+                </div>
+                <div class="text-center" style="margin-top: 30px">
+                    <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal" id="closeBtn"
+                            style="width: 150px">Close
+                    </button>
+                    <button type="submit" class="btn btn-danger delete-button" id="deleteBtn" style="width: 150px">
+                        Check out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myconfirm').on('show.bs.modal', function (event) {
+            console.log('Modal opened');
+            const button = $(event.relatedTarget);
+            rentalId = button.data('id');
+            oldDate = button.data('check-out-date');
+            oldPrice = button.data('total-price');
+        });
+    });
+
+    const deleteButton = document.getElementById('deleteBtn');
+    deleteButton.addEventListener('click', async function () {
+        const currentDate = new Date().toISOString().split('T')[0];
+        if (oldDate !== currentDate) {
+            const formData = {
+                id: rentalId,
+                checkOutDate: currentDate
+            };
+            const response = await fetch(`/api/rentals/${rentalId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const responseJson = await response.json();
+            if (responseJson['errors']) {
+                console.log('Error updating rental:', response);
+                return;
+                // displayErrorMessage(responseJson['errors']);
+            } else {
+                console.log('Rental updated successfully');
+                location.href = '/rental/check-update/' + rentalId + '?oldDate=' + oldDate + '&oldPrice=' + oldPrice;
+            }
+        }
+        await processCheckOutRequest('PUT', `/api/rentals/check-out/${rentalId}`);
+    });
+
+    async function processCheckOutRequest(method, url) {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        try {
+            const checkOutResponseJson = await response.json();
+            if (checkOutResponseJson['errors']) {
+                console.log('Error checking out guest:', checkOutResponseJson);
+            } else {
+                $('#myconfirm').modal('hide');
+                console.log('Guest checked out successfully');
+                showSuccessMessage(`Guest checked out successfully`);
+                setTimeout(() => location.reload(), 3100);
+            }
+        } catch (e) {
+            console.log('Error deleting guest');
+            //  console.error('Error deleting guest');
+        }
+    }
+</script>
+
 
 <script th:src="@{/scripts/errors.js}"></script>
 </body>

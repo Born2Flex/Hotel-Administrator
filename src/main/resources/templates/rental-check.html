@@ -26,7 +26,7 @@
       <div class="room-details">
         <h5 class="card-title" style="text-align: center">Room Details</h5>
         <p><strong>Room Number:</strong> <span th:text="${rental.room.roomNumber}"></span></p>
-        <p><strong>Room Type:</strong> <span th:text="${rental.room.roomType.type}"></span></p>
+        <p><strong>Room Type:</strong> <span th:text="${rental.room.roomType.getName}"></span></p>
         <p><strong>Room Price per Day:</strong> <span th:text="${rental.room.price}"></span>$</p>
       </div>
       <hr>

@@ -13,8 +13,8 @@ public class RoomType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "type", nullable = false, length = 20)
-    private String type;
+    @Column(name = "type_name", nullable = false, length = 20)
+    private String typeName;
     @Column(name = "description", nullable = false, length = 100)
     private String description;
 }

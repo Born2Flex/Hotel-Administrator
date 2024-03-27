@@ -12,7 +12,7 @@ INSERT INTO guest (first_name, last_name, email, phone_number, passport) VALUES
 ('Matthew', 'Hernandez', 'matthew.hernandez@example.com', '555-654-3210', 'ST6543210');
 
 -- Room types
-INSERT INTO room_type (type, description)VALUES
+INSERT INTO room_type (type_name, description)VALUES
 ('Single', 'Single room'),
 ('Double', 'Double room'),
 ('Deluxe', 'Deluxe room'),
@@ -24,8 +24,8 @@ INSERT INTO room (room_number, room_type_id, is_available, num_of_beds, price) V
 ('101', 1, false, 1, 40),
 ('102', 1, false, 1, 50),
 ('201', 2, false, 2, 80),
-('202', 2, true, 2, 90),
-('203', 2, true, 2, 100),
+('202', 2, false, 2, 90),
+('203', 2, false, 2, 100),
 ('301', 3, true, 3, 200),
 ('302', 3, true, 2, 210),
 ('303', 3, true, 3, 220),
@@ -40,9 +40,8 @@ INSERT INTO rental (room_id, guest_id, check_in_date, check_out_date, total_pric
 (1, 1, '2024-03-25', '2024-03-30', 200),
 (2, 2, '2024-03-20', '2024-03-30', 500),
 (3, 3, '2024-03-25', '2024-04-01', 560),
--- REMOVE
-(3, 3, '2024-03-25', '2024-03-27', 560),
-(2, 2, '2024-03-25', '2024-03-27', 560);
+(4, 4, '2024-03-25', '2024-03-27', 560),
+(5, 5, '2024-03-25', '2024-03-27', 560);
 -- (4, 4, '2021-01-01', '2021-01-05', 450),
 -- (5, 5, '2021-01-01', '2021-01-05', 500),
 -- (6, 6, '2021-01-01', '2021-01-05', 1000),
