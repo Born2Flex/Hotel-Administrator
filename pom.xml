@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.task</groupId>
-	<artifactId>gfl_final</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>gfl_final</name>
-	<description>gfl_final</description>
+	<artifactId>hotel</artifactId>
+	<version>0.0.7</version>
+	<name>hotel_administrator</name>
+	<description>GFL Final project</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
