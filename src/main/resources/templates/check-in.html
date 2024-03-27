@@ -333,7 +333,7 @@
                 roomTypes.forEach(roomType => {
                     const option = document.createElement('option');
                     option.value = roomType.id; // Set the value to the ID of the room type
-                    option.innerHTML = 'Type: ' + roomType.type;
+                    option.innerHTML = 'Type: ' + roomType.name;
 
                     roomTypeSelect.appendChild(option);
                 });
