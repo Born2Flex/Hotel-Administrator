@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.task.gfl_final.rental.dto.RentalDto;
 import org.task.gfl_final.rental.dto.RentalPageDto;
 import org.task.gfl_final.rental.dto.RentalRegistrationDto;
-import org.task.gfl_final.rental.dto.RentalUpdateDto;
+import org.task.gfl_final.rental.dto.RentalDateUpdateDto;
 import org.task.gfl_final.room.Room;
 import org.task.gfl_final.room.RoomRepository;
 
@@ -32,7 +32,7 @@ public class RentalService {
         return modelMapper.map(rentalRepository.save(rental), RentalDto.class);
     }
 
-    public RentalDto updateRental(Long id, RentalUpdateDto rentalDTO) {
+    public RentalDto updateRental(Long id, RentalDateUpdateDto rentalDTO) {
         Rental rental = rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
         rental.setCheckOutDate(rentalDTO.getCheckOutDate());
         rental.setTotalPrice(calculateTotalPrice(rental.getRoom(), rental.getCheckInDate(), rental.getCheckOutDate()));
@@ -51,6 +51,25 @@ public class RentalService {
                 .map(rental -> modelMapper.map(rental, RentalDto.class))
                 .toList();
         return new RentalPageDto(pageable.getPageNumber(), page.getTotalPages(), rentals);
+    }
+
+    public RentalPageDto getRentalsWhichCheckOutToday(Pageable pageable) {
+        Page<Rental> page = rentalRepository.findRentalsWhichCheckOutToday(pageable);
+        List<RentalDto> rentals = page.stream()
+                .map(rental -> modelMapper.map(rental, RentalDto.class))
+                .toList();
+        return new RentalPageDto(pageable.getPageNumber(), page.getTotalPages(), rentals);
+    }
+
+    public List<RentalDto> checkOutRentals(List<Long> rentalIds) {
+        List<Rental> rentals = rentalRepository.findAllById(rentalIds);
+        rentals.forEach(rental -> {
+            rental.getRoom().setIsAvailable(true);
+            roomRepository.save(rental.getRoom());
+        });
+        return rentals.stream()
+                .map(rental -> modelMapper.map(rental, RentalDto.class))
+                .toList();
     }
 
     private BigDecimal calculateTotalPrice(Room room, LocalDate checkInDate, LocalDate checkOutDate) {

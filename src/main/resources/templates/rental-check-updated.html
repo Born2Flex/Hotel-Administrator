@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Check</title>
+  <!-- Link to Bootstrap CSS -->
+  <link th:replace="~{fragments/bootstrap :: bootstrap}"/>
+</head>
+<body>
+<div class="container">
+  <div class="card mt-5 mx-auto" style="max-width: 600px;">
+    <div class="card-header text-center">
+      <h4>Rental Check #<span th:text="${rental.id}"></span></h4>
+    </div>
+    <div class="card-body">
+      <div class="guest-details">
+        <h5 class="card-title" style="text-align: center">Guest Details</h5>
+        <p><strong>First Name:</strong> <span th:text="${rental.guest.firstName}"></span></p>
+        <p><strong>Last Name:</strong> <span th:text="${rental.guest.lastName}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${rental.guest.email}"></span></p>
+        <p><strong>Phone Number:</strong> <span th:text="${rental.guest.phoneNumber}"></span></p>
+        <p><strong>Passport:</strong> <span th:text="${rental.guest.passport}"></span></p>
+      </div>
+      <hr>
+      <div class="room-details">
+        <h5 class="card-title" style="text-align: center">Room Details</h5>
+        <p><strong>Room Number:</strong> <span th:text="${rental.room.roomNumber}"></span></p>
+        <p><strong>Room Type:</strong> <span th:text="${rental.room.roomType.type}"></span></p>
+        <p><strong>Room Price per Day:</strong> <span th:text="${rental.room.price}"></span>$</p>
+      </div>
+      <hr>
+      <div class="date-details">
+        <h5 class="card-title" style="text-align: center; color: gray">Old Rental Period</h5>
+        <p style="color: gray"><strong>Check-in Date:</strong> <span th:text="${#temporals.format(rental.checkInDate, 'dd-MM-yyyy')}"></span></p>
+        <p style="color: gray"><strong>Check-out Date:</strong> <span th:text="${#temporals.format(oldDate, 'dd-MM-yyyy')}"></span></p>
+        <p style="color: gray"><strong>Price:</strong> <span th:text="${oldPrice}"></span></p>
+      </div>
+      <hr>
+      <div class="date-details">
+        <h5 class="card-title" style="text-align: center">New Rental Period</h5>
+        <p><strong>Check-in Date:</strong> <span th:text="${#temporals.format(rental.checkInDate, 'dd-MM-yyyy')}"></span></p>
+        <p><strong>Check-out Date:</strong> <span th:text="${#temporals.format(rental.checkOutDate, 'dd-MM-yyyy')}"></span></p>
+        <p><strong>Price:</strong> <span th:text="${rental.totalPrice}"></span></p>
+      </div>
+
+    </div>
+    <div th:if="${rental.totalPrice - oldPrice < 0}" class="card-footer text-center">
+      <h3><strong>Take change on reception:</strong> <span class="text-dark" th:text="${oldPrice - rental.totalPrice}"></span>$</h3>
+    </div>
+    <div th:unless="${rental.totalPrice - oldPrice < 0}" class="card-footer text-center">
+      <h3><strong>Additional payment:</strong> <span class="text-dark" th:text="${rental.totalPrice - oldPrice}"></span>$</h3>
+    </div>
+
+  </div>
+    <div style="text-align: center">
+        <a href="/" class="btn btn-primary mt-3">Return to Main</a>
+    </div>
+</div>
+</body>
+</html>

@@ -5,11 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.task.gfl_final.rental.RentalService;
 import org.task.gfl_final.rental.dto.RentalPageDto;
+import org.task.gfl_final.rental.dto.RentalDateUpdateDto;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 
 @Controller
@@ -23,7 +25,9 @@ public class RentalViewController {
     }
 
     @GetMapping("/check-out")
-    public String checkOut() {
+    public String checkOut(Model model, @PageableDefault(sort = "id", size = 5) Pageable pageable) {
+        model.addAttribute("rentals", rentalService.getRentalsWhichCheckOutToday(pageable).getRentals());
+        model.addAttribute("table_caption", "Check Out");
         return "check-out";
     }
 
@@ -42,5 +46,14 @@ public class RentalViewController {
         model.addAttribute("table_caption", "Current Rentals");
         model.addAttribute("url", "/current-rentals");
         return "current-rentals";
+    }
+
+    @GetMapping("/rental/check-update/{id}")
+    public String checkOutRental(@PathVariable Long id, @RequestParam LocalDate oldDate, @RequestParam BigDecimal oldPrice,
+                                 Model model) {
+        model.addAttribute("rental", rentalService.getRentalById(id));
+        model.addAttribute("oldDate", oldDate);
+        model.addAttribute("oldPrice", oldPrice);
+        return "rental-check-updated";
     }
 }

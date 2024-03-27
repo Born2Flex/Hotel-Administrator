@@ -53,7 +53,7 @@
             <!-- Start Date -->
             <div class="mb-3">
                 <label for="checkInDate">Start Date</label>
-                <input type="date" class="form-control" id="checkInDate" required>
+                <input type="date" class="form-control" id="checkInDate" disabled>
                 <span id="checkInDateError" class="text-danger"></span>
             </div>
 
@@ -422,6 +422,8 @@
 <!--Form submission-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const element = document.getElementById('checkInDate');
+        element.value = new Date().toISOString().substr(0, 10);
         async function handleSubmit() {
             const roomTypeSelect = document.getElementById('roomTypeSelection');
             const roomSelect = document.getElementById('roomSelection');

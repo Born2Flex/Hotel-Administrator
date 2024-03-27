@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rentals Check-out</title>
+    <link th:replace="~{fragments/bootstrap :: bootstrap}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div th:replace="~{fragments/success-toaster :: success-toaster}"></div>
+<!--                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#checkOut"-->
+<!--                            th:attr="data-id=${r.id}">-->
+<!--                        Check out-->
+<!--                    </button>-->
+
+<div class="container">
+    <div id="main_part_content">
+        <h1>
+            <span th:text="${table_caption}" th:remove="tag">title</span>
+        </h1>
+        <span style="color: gray; padding-left: 5px">
+            Here are guests which check out today
+        </span>
+<!--        <a th:href="@{/check-in}" class="btn btn-info mb-3">Add rental</a>-->
+        <table class="table table-striped table-bordered" style="margin-top: 15px">
+            <thead>
+            <tr >
+                <th scope="col" style="text-align: center">#</th>
+                <th scope="col" style="text-align: center">ID</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Passport</th>
+                <th scope="col">Room</th>
+                <th scope="col">Check in</th>
+                <th scope="col">Check out</th>
+                <th scope="col">Price</th>
+<!--                <th scope="col" style="text-align: center">Actions</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="r : ${rentals}">
+                <td style="text-align: center; vertical-align: center"> <!-- Center align content -->
+                    <input type="checkbox" name="rentalIds" th:value="${r.id}" />
+                </td>
+                <td th:text="${r.id}" style="text-align: center"></td>
+                <td th:text="${r.guest.firstName}"></td>
+                <td th:text="${r.guest.lastName}"></td>
+                <td th:text="${r.guest.passport}"></td>
+                <td th:text="${r.room.roomNumber}" ></td>
+                <td th:text="${#temporals.format(r.checkInDate, 'dd-MM-yyyy')}"></td>
+                <td th:text="${#temporals.format(r.checkOutDate, 'dd-MM-yyyy')}"></td>
+                <td th:text="${r.totalPrice}"></td>
+<!--                <td style="text-align: center">-->
+<!--                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editRentalModal"-->
+<!--                            th:attr="data-id=${r.id}, data-check-in-date=${r.checkInDate},-->
+<!--                            data-check-out-date=${r.checkOutDate}">-->
+<!--                        Edit-->
+<!--                    </button>-->
+<!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
+        <span id="checkOutError" class="text-danger"></span>
+        <div class="d-flex justify-content-center" style="margin-top: 40px">
+            <button type="button" class="btn btn-info btn-block" style="width: 200px"  onclick="checkout()">Check out</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function checkout() {
+        var rentalIds = [];
+        var checkboxes = document.querySelectorAll('input[name="rentalIds"]:checked');
+        checkboxes.forEach(function(checkbox) {
+            rentalIds.push(checkbox.value);
+        });
+        fetch('/api/rentals/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(rentalIds)
+        })
+            .then(response => {
+                if (response.ok) {
+                    clearError('checkOutError')
+                    showSuccessMessage('Check out successful');
+                    setTimeout(_ => location.reload(), 3100);
+                } else {
+                    const responseJson = response.json();
+                    showError('checkOutError', responseJson['errors'])
+                }
+            })
+            .catch(error => {
+                showError('checkOutError', 'An error occurred during check out')
+                console.error('Error during checkout:', error);
+            });
+    }
+</script>
+
+
+<!-- Delete Guest Modal-->
+<div class="modal fade" id="checkOut" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Check out</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    Are you sure want to check out?</br>
+                    This action <i>cannot be undone</i>.
+                </div>
+                <div class="text-center" style="margin-top: 30px">
+                    <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal" id="closeBtn"
+                            style="width: 150px">Close
+                    </button>
+                    <button type="submit" class="btn btn-danger delete-button" id="checkOutBtn" style="width: 150px">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#checkOut').on('show.bs.modal', function (event) {
+            console.log('Modal opened');
+            const button = $(event.relatedTarget);
+            currentGuestId = button.data('id');
+        });
+    });
+
+    const deleteButton = document.getElementById('checkOutBtn');
+    deleteButton.addEventListener('click', async function () {
+        await processCheckOutRequest('PUT', `/api/rentals/check-out/${currentGuestId}`);
+    });
+
+    async function processCheckOutRequest(method, url) {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        try {
+            if (!response.ok) {
+                console.error('Error check-out guest:', response);
+            } else {
+                $('#checkOut').modal('hide');
+                console.log('Guest check-outed successfully');
+                location.href
+                // showSuccessMessage(`Guest deleted successfully`);
+                // setTimeout(() => location.reload(), 3100);
+            }
+        } catch (e) {
+            console.log('Error deleting guest');
+            //  console.error('Error deleting guest');
+        }
+    }
+
+</script>
+<script th:src="@{/scripts/errors.js}"></script>
+</body>
+</html>
