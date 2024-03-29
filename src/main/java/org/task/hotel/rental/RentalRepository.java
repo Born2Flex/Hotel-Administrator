@@ -12,7 +12,7 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
      * @return Page of Rental objects
      */
     @Query("SELECT r FROM Rental r JOIN r.room m " +
-            "WHERE r.checkOutDate >= CURRENT_DATE AND m.isAvailable = false")
+            "WHERE m.isAvailable = false")
     Page<Rental> findCurrentRentals(Pageable pageable);
 
 

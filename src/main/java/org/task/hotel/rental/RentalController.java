@@ -1,5 +1,6 @@
 package org.task.hotel.rental;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.task.hotel.rental.dto.RentalDateUpdateDto;
@@ -24,7 +25,7 @@ public class RentalController {
      * @return the registered rental's information
      */
     @PostMapping
-    public RentalDto registerRental(@RequestBody RentalRegistrationDto rentalRegistrationDTO) {
+    public RentalDto registerRental(@RequestBody @Valid RentalRegistrationDto rentalRegistrationDTO) {
         return rentalService.registerRental(rentalRegistrationDTO);
     }
 
@@ -36,7 +37,7 @@ public class RentalController {
      * @return the updated rental's information
      */
     @PutMapping("/{id}")
-    public RentalDto updateRental(@PathVariable Long id, @RequestBody RentalDateUpdateDto rentalDTO) {
+    public RentalDto updateRental(@PathVariable Long id, @RequestBody @Valid RentalDateUpdateDto rentalDTO) {
         return rentalService.updateRental(id, rentalDTO);
     }
 
