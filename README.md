@@ -1,4 +1,6 @@
 # GFL Final Task. Hotel administrator app    
+![изображение](https://github.com/Born2Flex/Hotel-Administrator/assets/128870529/e690138a-c66b-4833-9578-38acc7f322a0)
+
 <p>Requirements</p>
 <p>Java version: 21</p>
 <p>Build tool: Maven</p>
